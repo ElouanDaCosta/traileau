@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"traileau/configs"
 
 	"github.com/joho/godotenv"
 
@@ -21,6 +22,7 @@ func main() {
 	if dotenv != nil {
 		log.Fatal("Error loading .env file")
 	}
+	configs.Connect()
 	r.SetTrustedProxies(nil)
 	err := r.Run(":" + os.Getenv("MAIN_PORT"))
 	if err != nil {
