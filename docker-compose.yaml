@@ -1,0 +1,20 @@
+name: traileau
+volumes:
+  db-data:
+networks:
+  backend:
+
+services:
+  traileau-db:
+    image: mongo:6-jammy
+    container_name: traileau-db
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - db-data:/var/lib/mongo/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - backend
