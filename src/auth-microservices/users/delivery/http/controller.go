@@ -1,10 +1,10 @@
-package controllers
+package http
 
 import (
 	"net/http"
 	responses "traileau/users/delivery/response"
+	usecase "traileau/users/domain/usecase"
 	models "traileau/users/models"
-	usecase "traileau/users/usecase"
 
 	"github.com/gin-gonic/gin"
 )
