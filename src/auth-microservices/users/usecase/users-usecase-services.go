@@ -3,12 +3,12 @@ package users_usecase
 import (
 	"context"
 	"log"
-	models "traileau/src/users/models"
-	repository "traileau/src/users/repository"
+	domain "traileau/users/domain/repository"
+	models "traileau/users/models"
 )
 
 type UserServiceImpl struct {
-	userRepo repository.UserRepositoryI
+	userRepo domain.UserRepositoryInterface
 	ctx      context.Context
 }
 

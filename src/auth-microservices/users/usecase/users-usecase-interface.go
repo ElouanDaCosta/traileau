@@ -2,7 +2,7 @@ package users_usecase
 
 import (
 	"context"
-	model "traileau/src/users/models"
+	model "traileau/users/models"
 )
 
 type UserUsecase interface {

@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	users_model "traileau/src/users/models"
+	users_model "traileau/users/models"
 )
 
 type UserRepositoryInterface interface {
