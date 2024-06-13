@@ -19,8 +19,17 @@ func (u *UserServiceImpl) DeleteUser(ctx context.Context, req *string) error {
 }
 
 // GetAll implements usecase.UserUsecase.
-func (u *UserServiceImpl) GetAll(ctx context.Context) ([]models.User, error) {
-	panic("unimplemented")
+func (u UserServiceImpl) GetAll(ctx context.Context) ([]models.User, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	list, err := u.userRepo.GetAllData(ctx)
+	if err != nil {
+		log.Println("failed to show data user with default log")
+		return list, err
+	}
+
+	return list, err
 }
 
 // GetUser implements usecase.UserUsecase.

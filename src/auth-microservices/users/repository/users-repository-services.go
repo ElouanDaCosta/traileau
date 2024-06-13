@@ -6,6 +6,7 @@ import (
 	domain "traileau/users/domain/repository"
 	models "traileau/users/models"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -19,8 +20,25 @@ func (c *UserRepository) DeleteData(ctx context.Context, req *string) error {
 }
 
 // GetAllData implements repository.UserRepositoryInterface.
-func (c *UserRepository) GetAllData(ctx context.Context) (user []models.User, err error) {
-	panic("unimplemented")
+func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User, err error) {
+	query, err := c.mongoDB.Collection("students").Find(ctx, bson.D{})
+	if err != nil {
+		log.Println("error", err)
+		return []models.User{}, err
+	}
+	defer query.Close(ctx)
+
+	listDataUser := make([]models.User, 0)
+	for query.Next(ctx) {
+		var row models.User
+		err := query.Decode(&row)
+		if err != nil {
+			log.Println("error")
+		}
+		listDataUser = append(listDataUser, row)
+	}
+
+	return listDataUser, err
 }
 
 // GetData implements repository.UserRepositoryInterface.

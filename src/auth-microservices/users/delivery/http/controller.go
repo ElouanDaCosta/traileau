@@ -32,3 +32,12 @@ func (uc *UserController) CreateUser(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success"})
 }
+
+func (uc *UserController) GetAll(ctx *gin.Context) {
+	users, err := uc.UserUseCase.GetAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: users})
+}
