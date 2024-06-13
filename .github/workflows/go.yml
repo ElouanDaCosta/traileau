@@ -5,24 +5,25 @@ name: Go
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: ['develop', 'main']
   pull_request:
-    branches: [ "develop", "main" ]
+    branches: ['develop', 'main']
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.22.4'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22.4'
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        working-directory: ./src/auth-microservices
+        run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
+      - name: Test
+        working-directory: ./src/auth-microservices
+        run: go test -v ./...
