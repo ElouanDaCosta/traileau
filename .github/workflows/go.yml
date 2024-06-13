@@ -20,8 +20,11 @@ jobs:
         with:
           go-version: '1.22.4'
 
+      - name: Changing directory
+        run: cd src/auth-microservices
+
       - name: Build
-        run: go build -v ./src/auth-microservices/...
+        run: go build -v ./...
 
       - name: Test
-        run: go test -v ./src/auth-microservices/...
+        run: go test -v ./...
