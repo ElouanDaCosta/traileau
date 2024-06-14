@@ -52,15 +52,14 @@ func main() {
 		}
 	}(mongoClient, ctx)
 
-	basePath := server.Group("/v1")
-	uc.RegisterUserRoutes(basePath)
-
 	dotenv := godotenv.Load()
 	if dotenv != nil {
 		log.Fatal("Error loading .env file")
 	}
+	basePath := server.Group("v" + os.Getenv("AUTH_API_VERSION"))
+	uc.RegisterUserRoutes(basePath)
 	server.SetTrustedProxies(nil)
-	server.Run()
+	server.Run(":" + os.Getenv("AUTH_PORT"))
 
 	log.Fatal(server.Run(":" + os.Getenv("AUTH_PORT")))
 }
