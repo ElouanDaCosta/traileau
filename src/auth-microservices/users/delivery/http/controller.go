@@ -8,6 +8,8 @@ import (
 	usecase "traileau/users/domain/usecase"
 	models "traileau/users/models"
 
+	"github.com/go-playground/validator/v10"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,6 +25,7 @@ func New(userservice usecase.UserUsecase) UserController {
 }
 
 func (uc *UserController) Register(ctx *gin.Context) {
+	validate := validator.New(validator.WithRequiredStructEnabled())
 	var user models.User
 	decoder := json.NewDecoder(ctx.Request.Body)
 	error := decoder.Decode(&user)
@@ -30,15 +33,20 @@ func (uc *UserController) Register(ctx *gin.Context) {
 		fmt.Printf("error %s", error)
 		ctx.JSON(501, gin.H{"error": error})
 	}
-	//fmt.Printf("Decode Body %v\n\n", user)
-	if user.Email == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Email is required"})
-		return
-	}
+	// Use bcrypt to encrypt the password
 	cryptedPassword, errorCryptingPassword := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if errorCryptingPassword != nil {
 		fmt.Printf("error %s", error)
 		ctx.JSON(501, gin.H{"error": error})
+		return
+	}
+
+	errorValidateUser := validate.Struct(&user)
+
+	if errorValidateUser != nil {
+		fmt.Println("validation failed 2")
+		ctx.JSON(501, gin.H{"error": error})
+		return
 	}
 
 	newUser := models.User{

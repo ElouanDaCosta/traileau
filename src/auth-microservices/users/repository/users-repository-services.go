@@ -21,7 +21,7 @@ func (c *UserRepository) DeleteData(ctx context.Context, req *string) error {
 
 // GetAllData implements repository.UserRepositoryInterface.
 func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User, err error) {
-	query, err := c.mongoDB.Collection("students").Find(ctx, bson.D{})
+	query, err := c.mongoDB.Collection("users").Find(ctx, bson.D{})
 	if err != nil {
 		log.Println("error", err)
 		return []models.User{}, err
@@ -53,7 +53,7 @@ func (c *UserRepository) UpdateData(ctx context.Context, req *models.User) error
 
 func (c UserRepository) InsertData(ctx context.Context, req *models.User) error {
 
-	_, err := c.mongoDB.Collection("students").InsertOne(ctx, req)
+	_, err := c.mongoDB.Collection("users").InsertOne(ctx, req)
 	if err != nil {
 		log.Println("error")
 	}
