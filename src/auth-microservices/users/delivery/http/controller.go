@@ -1,12 +1,15 @@
 package http
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	responses "traileau/users/delivery/response"
 	usecase "traileau/users/domain/usecase"
 	models "traileau/users/models"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -19,13 +22,32 @@ func New(userservice usecase.UserUsecase) UserController {
 	}
 }
 
-func (uc *UserController) CreateUser(ctx *gin.Context) {
+func (uc *UserController) Register(ctx *gin.Context) {
 	var user models.User
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	decoder := json.NewDecoder(ctx.Request.Body)
+	error := decoder.Decode(&user)
+	if error != nil {
+		fmt.Printf("error %s", error)
+		ctx.JSON(501, gin.H{"error": error})
+	}
+	//fmt.Printf("Decode Body %v\n\n", user)
+	if user.Email == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Email is required"})
 		return
 	}
-	err := uc.UserUseCase.CreateUser(ctx, &user)
+	cryptedPassword, errorCryptingPassword := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if errorCryptingPassword != nil {
+		fmt.Printf("error %s", error)
+		ctx.JSON(501, gin.H{"error": error})
+	}
+
+	newUser := models.User{
+		Username: user.Username,
+		Email:    user.Email,
+		Password: string(cryptedPassword),
+	}
+
+	err := uc.UserUseCase.CreateUser(ctx, &newUser)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
