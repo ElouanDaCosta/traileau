@@ -45,7 +45,7 @@ func (uc *UserController) Register(ctx *gin.Context) {
 
 	if errorValidateUser != nil {
 		fmt.Println("validation failed 2")
-		ctx.JSON(501, gin.H{"error": error})
+		ctx.JSON(400, gin.H{"error": error})
 		return
 	}
 
