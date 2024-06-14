@@ -25,8 +25,12 @@ func New(userservice usecase.UserUsecase) UserController {
 }
 
 func (uc *UserController) Register(ctx *gin.Context) {
+	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
+
 	var user models.User
+
+	// Decode the request body to access the data like a json
 	decoder := json.NewDecoder(ctx.Request.Body)
 	error := decoder.Decode(&user)
 	if error != nil {
@@ -41,8 +45,10 @@ func (uc *UserController) Register(ctx *gin.Context) {
 		return
 	}
 
+	// Validate the user struct
 	errorValidateUser := validate.Struct(&user)
 
+	// Return 400 if missing user input
 	if errorValidateUser != nil {
 		fmt.Println("validation failed 2")
 		ctx.JSON(400, gin.H{"error": error})
@@ -55,6 +61,7 @@ func (uc *UserController) Register(ctx *gin.Context) {
 		Password: string(cryptedPassword),
 	}
 
+	// Insert the new user in db
 	err := uc.UserUseCase.CreateUser(ctx, &newUser)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
