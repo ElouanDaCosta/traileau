@@ -96,10 +96,11 @@ func (uc *UserController) GetAll(ctx *gin.Context) {
 
 func (uc *UserController) GetOne(ctx *gin.Context) {
 	email, err := ctx.GetQuery("email")
+	var userModel *models.User
 
-	if err {
+	if !err {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to read the body.",
+			"error": "Failed to read the query",
 		})
 	}
 
@@ -107,9 +108,16 @@ func (uc *UserController) GetOne(ctx *gin.Context) {
 
 	if userError != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to read the body.",
+			"error": "Failed to get the user",
 		})
 	}
 
-	fmt.Printf("%+v", user)
+	if user != userModel {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "Failed to pipikk",
+		})
+	}
+
+	fmt.Printf("%+v\n", user)
+
 }

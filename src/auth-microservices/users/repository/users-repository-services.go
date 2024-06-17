@@ -44,8 +44,9 @@ func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User,
 // GetData implements repository.UserRepositoryInterface.
 func (c *UserRepository) GetData(ctx context.Context, username *string) (user *models.User, err error) {
 	var result struct {
-		Name  string `bson:"username"`
-		Email string `bson:"email"`
+		Name     string `bson:"username"`
+		Email    string `bson:"email"`
+		Password string `bson:"password"`
 	}
 	collection := c.mongoDB.Collection("users")
 	filter := bson.D{{Key: "email", Value: username}}
@@ -55,6 +56,7 @@ func (c *UserRepository) GetData(ctx context.Context, username *string) (user *m
 	user = &models.User{
 		Username: result.Name,
 		Email:    result.Email,
+		Password: result.Password,
 	}
 
 	return user, err
