@@ -2,14 +2,12 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"log"
 	domain "traileau/users/domain/repository"
 	models "traileau/users/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type UserRepository struct {
@@ -46,22 +44,18 @@ func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User,
 // GetData implements repository.UserRepositoryInterface.
 func (c *UserRepository) GetData(ctx context.Context, username *string) (user *models.User, err error) {
 	var result struct {
-		Name  string `bson:"name"`
+		Name  string `bson:"username"`
 		Email string `bson:"email"`
 	}
 	collection := c.mongoDB.Collection("users")
-	filter := bson.D{{"email", username}}
-	project := bson.D{{"email", 1}}
-	opts := options.FindOne().SetProjection(project)
+	filter := bson.D{{Key: "email", Value: username}}
 
-	err = collection.FindOne(context.TODO(), filter, opts).Decode(&result)
+	err = collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	user = &models.User{
 		Username: result.Name,
 		Email:    result.Email,
 	}
-
-	fmt.Printf("%v", user)
 
 	return user, err
 }
