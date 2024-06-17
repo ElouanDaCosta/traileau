@@ -70,6 +70,21 @@ func (uc *UserController) Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success"})
 }
 
+func (uc *UserController) SignIn(ctx *gin.Context) {
+	var body struct {
+		Email    string
+		Password string
+	}
+
+	if ctx.Bind(&body) != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read the body.",
+		})
+	}
+
+	fmt.Printf("%+v", body)
+}
+
 func (uc *UserController) GetAll(ctx *gin.Context) {
 	users, err := uc.UserUseCase.GetAll(ctx)
 	if err != nil {
@@ -77,4 +92,24 @@ func (uc *UserController) GetAll(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: users})
+}
+
+func (uc *UserController) GetOne(ctx *gin.Context) {
+	email, err := ctx.GetQuery("email")
+
+	if err {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read the body.",
+		})
+	}
+
+	user, userError := uc.UserUseCase.GetUser(ctx, &email)
+
+	if userError != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read the body.",
+		})
+	}
+
+	fmt.Printf("%+v", user)
 }

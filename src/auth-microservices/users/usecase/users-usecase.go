@@ -34,7 +34,16 @@ func (u UserServiceImpl) GetAll(ctx context.Context) ([]models.User, error) {
 
 // GetUser implements usecase.UserUsecase.
 func (u *UserServiceImpl) GetUser(ctx context.Context, req *string) (*models.User, error) {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	user, err := u.userRepo.GetData(ctx, req)
+	if err != nil {
+		log.Println("failed to show data user with default log")
+		return user, err
+	}
+
+	return user, err
 }
 
 // UpdateUser implements usecase.UserUsecase.
