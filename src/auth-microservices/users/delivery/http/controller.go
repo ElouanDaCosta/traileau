@@ -82,7 +82,16 @@ func (uc *UserController) SignIn(ctx *gin.Context) {
 		})
 	}
 
-	fmt.Printf("%+v", body)
+	user, userError := uc.UserUseCase.GetUser(ctx, &body.Email)
+
+	if userError != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "User not found",
+		})
+	}
+
+	fmt.Println(user)
+
 }
 
 func (uc *UserController) GetAll(ctx *gin.Context) {
@@ -96,7 +105,6 @@ func (uc *UserController) GetAll(ctx *gin.Context) {
 
 func (uc *UserController) GetOne(ctx *gin.Context) {
 	email, err := ctx.GetQuery("email")
-	var userModel *models.User
 
 	if !err {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -107,17 +115,10 @@ func (uc *UserController) GetOne(ctx *gin.Context) {
 	user, userError := uc.UserUseCase.GetUser(ctx, &email)
 
 	if userError != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to get the user",
-		})
-	}
-
-	if user != userModel {
 		ctx.JSON(http.StatusNotFound, gin.H{
-			"error": "Failed to pipikk",
+			"error": "User not found",
 		})
+	} else {
+		ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: user})
 	}
-
-	fmt.Printf("%+v\n", user)
-
 }
