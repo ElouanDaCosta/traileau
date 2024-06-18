@@ -21,7 +21,7 @@ func (c *UserRepository) DeleteData(ctx context.Context, req *string) error {
 
 // GetAllData implements repository.UserRepositoryInterface.
 func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User, err error) {
-	query, err := c.mongoDB.Collection("students").Find(ctx, bson.D{})
+	query, err := c.mongoDB.Collection("users").Find(ctx, bson.D{})
 	if err != nil {
 		log.Println("error", err)
 		return []models.User{}, err
@@ -43,7 +43,23 @@ func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User,
 
 // GetData implements repository.UserRepositoryInterface.
 func (c *UserRepository) GetData(ctx context.Context, username *string) (user *models.User, err error) {
-	panic("unimplemented")
+	var result struct {
+		Name     string `bson:"username"`
+		Email    string `bson:"email"`
+		Password string `bson:"password"`
+	}
+	collection := c.mongoDB.Collection("users")
+	filter := bson.D{{Key: "email", Value: username}}
+
+	err = collection.FindOne(context.TODO(), filter).Decode(&result)
+
+	user = &models.User{
+		Username: result.Name,
+		Email:    result.Email,
+		Password: result.Password,
+	}
+
+	return user, err
 }
 
 // UpdateData implements repository.UserRepositoryInterface.
@@ -53,7 +69,7 @@ func (c *UserRepository) UpdateData(ctx context.Context, req *models.User) error
 
 func (c UserRepository) InsertData(ctx context.Context, req *models.User) error {
 
-	_, err := c.mongoDB.Collection("students").InsertOne(ctx, req)
+	_, err := c.mongoDB.Collection("users").InsertOne(ctx, req)
 	if err != nil {
 		log.Println("error")
 	}

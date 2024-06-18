@@ -1,8 +1,7 @@
 package users_model
 
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Username string `json:"username" validate:"required" binding:"required"`
+	Email    string `json:"email" validate:"required" binding:"required"`
+	Password string `json:"password" validate:"required" binding:"required"`
 }

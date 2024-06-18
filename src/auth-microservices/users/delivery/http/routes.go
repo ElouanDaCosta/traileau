@@ -5,7 +5,9 @@ import (
 )
 
 func (uc UserController) RegisterUserRoutes(rg *gin.RouterGroup) {
-	userroute := rg.Group("/user")
-	userroute.POST("/create", uc.CreateUser)
-	userroute.GET("/get", uc.GetAll)
+	userroute := rg.Group("/auth")
+	userroute.POST("/signup", uc.SignUp)
+	userroute.POST("signin", uc.SignIn)
+	userroute.GET("/getall", uc.GetAll)
+	userroute.GET("/get", uc.GetOne)
 }

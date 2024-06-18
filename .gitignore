@@ -23,6 +23,7 @@ go.work.sum
 
 # IDE
 .vscode
+.idea
 
 # Env
 .env
