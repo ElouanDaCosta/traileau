@@ -28,7 +28,7 @@ func New(userservice usecase.UserUsecase) UserController {
 	}
 }
 
-func (uc *UserController) Register(ctx *gin.Context) {
+func (uc *UserController) SignUp(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
@@ -68,14 +68,10 @@ func (uc *UserController) Register(ctx *gin.Context) {
 		return
 	}
 
-	// TODO
-	// Better management of the isUserExisting variables, don't want to return or print it
-
-	isUserExisting, userExistingError := uc.UserUseCase.GetUser(ctx, &user.Email)
+	_, userExistingError := uc.UserUseCase.GetUser(ctx, &user.Email)
 
 	if userExistingError == nil {
 		fmt.Println("User already exist")
-		fmt.Printf("%+v\n", &isUserExisting)
 		ctx.JSON(400, gin.H{"error": error})
 		return
 	}
