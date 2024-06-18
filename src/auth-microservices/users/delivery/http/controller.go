@@ -10,6 +10,8 @@ import (
 
 	"github.com/go-playground/validator/v10"
 
+	"traileau/users/utils"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -90,7 +92,22 @@ func (uc *UserController) SignIn(ctx *gin.Context) {
 		})
 	}
 
-	fmt.Println(user)
+	checkUserPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	token, tokenError := utils.CreateToken(body.Email)
+
+	if tokenError != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Generating token",
+		})
+	}
+
+	if checkUserPassword != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Wrong password",
+		})
+	} else {
+		ctx.JSON(http.StatusOK, responses.UserResponse{Status: http.StatusOK, Message: "success", Data: token})
+	}
 
 }
 
