@@ -12,6 +12,8 @@ import (
 
 	"traileau/users/utils"
 
+	"net/mail"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -38,6 +40,7 @@ func (uc *UserController) Register(ctx *gin.Context) {
 	if error != nil {
 		fmt.Printf("error %s", error)
 		ctx.JSON(501, gin.H{"error": error})
+		return
 	}
 	// Use bcrypt to encrypt the password
 	cryptedPassword, errorCryptingPassword := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
@@ -57,9 +60,29 @@ func (uc *UserController) Register(ctx *gin.Context) {
 		return
 	}
 
+	validEmail, mailError := mail.ParseAddress(user.Email)
+
+	if mailError != nil {
+		fmt.Println("Email not valid")
+		ctx.JSON(400, gin.H{"error": error})
+		return
+	}
+
+	// TODO
+	// Better management of the isUserExisting variables, don't want to return or print it
+
+	isUserExisting, userExistingError := uc.UserUseCase.GetUser(ctx, &user.Email)
+
+	if userExistingError == nil {
+		fmt.Println("User already exist")
+		fmt.Printf("%+v\n", &isUserExisting)
+		ctx.JSON(400, gin.H{"error": error})
+		return
+	}
+
 	newUser := models.User{
 		Username: user.Username,
-		Email:    user.Email,
+		Email:    validEmail.Address,
 		Password: string(cryptedPassword),
 	}
 
