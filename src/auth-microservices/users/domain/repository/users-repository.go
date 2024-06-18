@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	users_model "traileau/users/models"
+	users_model "traileau-auth-microservices/users/models"
 )
 
 type UserRepositoryInterface interface {

@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"log"
-	domain "traileau/users/domain/repository"
-	models "traileau/users/models"
+	domain "traileau-auth-microservices/users/domain/repository"
+	models "traileau-auth-microservices/users/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	responses "traileau/users/delivery/response"
-	usecase "traileau/users/domain/usecase"
-	models "traileau/users/models"
+	responses "traileau-auth-microservices/users/delivery/response"
+	usecase "traileau-auth-microservices/users/domain/usecase"
+	models "traileau-auth-microservices/users/models"
 
 	"github.com/go-playground/validator/v10"
 
-	"traileau/users/utils"
+	"traileau-auth-microservices/users/utils"
 
 	"net/mail"
 

@@ -1,4 +1,4 @@
-module traileau
+module traileau-auth-microservices
 
 go 1.22.4
 

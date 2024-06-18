@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	model "traileau/users/models"
+	model "traileau-auth-microservices/users/models"
 )
 
 type UserUsecase interface {
