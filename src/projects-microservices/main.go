@@ -58,7 +58,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	basePath := server.Group("v" + os.Getenv("AUTH_API_VERSION"))
+	basePath := server.Group("v" + os.Getenv("PROJECTS_API_VERSION"))
 	pc.RegisterProjectRoutes(basePath)
 	server.SetTrustedProxies(nil)
 	server.Run(":" + os.Getenv("PROJECTS_PORT"))

@@ -2,9 +2,11 @@ package repository
 
 import (
 	"context"
+	"log"
 	domain "traileau-projects-microservices/domain/repository"
 	model "traileau-projects-microservices/models"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -19,7 +21,24 @@ func (p *ProjectRepository) DeleteData(ctx context.Context, req *string) error {
 
 // GetAllData implements repository.ProjectRepositoryInterface.
 func (p *ProjectRepository) GetAllData(ctx context.Context) (user []model.Project, err error) {
-	panic("unimplemented")
+	query, err := p.mongoDB.Collection("projects").Find(ctx, bson.D{})
+	if err != nil {
+		log.Println("error", err)
+		return []model.Project{}, err
+	}
+	defer query.Close(ctx)
+
+	listDataProject := make([]model.Project, 0)
+	for query.Next(ctx) {
+		var row model.Project
+		err := query.Decode(&row)
+		if err != nil {
+			log.Println("error")
+		}
+		listDataProject = append(listDataProject, row)
+	}
+
+	return listDataProject, err
 }
 
 // GetData implements repository.ProjectRepositoryInterface.

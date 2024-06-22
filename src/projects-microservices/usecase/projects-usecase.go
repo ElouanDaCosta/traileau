@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"log"
 	domain1 "traileau-projects-microservices/domain/repository"
 	domain2 "traileau-projects-microservices/domain/usecase"
 	projects_model "traileau-projects-microservices/models"
@@ -24,7 +25,16 @@ func (p *ProjectServiceImpl) DeleteProject(ctx context.Context, req *string) err
 
 // GetAll implements usecase.ProjectUseCase.
 func (p *ProjectServiceImpl) GetAll(ctx context.Context) ([]projects_model.Project, error) {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	list, err := p.projectRepo.GetAllData(ctx)
+	if err != nil {
+		log.Println("failed to show data project with default log")
+		return list, err
+	}
+
+	return list, err
 }
 
 // GetProject implements usecase.ProjectUseCase.
