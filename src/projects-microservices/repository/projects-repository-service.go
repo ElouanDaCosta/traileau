@@ -48,7 +48,12 @@ func (p *ProjectRepository) GetData(ctx context.Context, username *string) (user
 
 // InsertData implements repository.ProjectRepositoryInterface.
 func (p *ProjectRepository) InsertData(ctx context.Context, req *model.Project) error {
-	panic("unimplemented")
+	_, err := p.mongoDB.Collection("projects").InsertOne(ctx, req)
+	if err != nil {
+		log.Println("error")
+	}
+
+	return err
 }
 
 // UpdateData implements repository.ProjectRepositoryInterface.

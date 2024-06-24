@@ -5,4 +5,5 @@ import "github.com/gin-gonic/gin"
 func (pc ProjectController) RegisterProjectRoutes(rg *gin.RouterGroup) {
 	projectroute := rg.Group("project")
 	projectroute.GET("/", pc.GetAll)
+	projectroute.POST("/", pc.CreateProject)
 }

@@ -15,7 +15,17 @@ type ProjectServiceImpl struct {
 
 // CreateProject implements usecase.ProjectUseCase.
 func (p *ProjectServiceImpl) CreateProject(ctx context.Context, req *projects_model.Project) error {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	err := p.projectRepo.InsertData(ctx, req)
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully Inserted Project Data")
+
+	return nil
 }
 
 // DeleteProject implements usecase.ProjectUseCase.
