@@ -6,7 +6,7 @@ import (
 	"net/http"
 	responses "traileau-auth-microservices/users/delivery/response"
 	usecase "traileau-auth-microservices/users/domain/usecase"
-	models "traileau-auth-microservices/users/models"
+	model "traileau-auth-microservices/users/models"
 
 	"github.com/go-playground/validator/v10"
 
@@ -32,7 +32,7 @@ func (uc *UserController) SignUp(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	var user models.User
+	var user model.User
 
 	// Decode the request body to access the data like a json
 	decoder := json.NewDecoder(ctx.Request.Body)
@@ -76,7 +76,7 @@ func (uc *UserController) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	newUser := models.User{
+	newUser := model.User{
 		Username: user.Username,
 		Email:    validEmail.Address,
 		Password: string(cryptedPassword),
