@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	responses "traileau-projects-microservices/delivery/response"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,11 +17,12 @@ type SignedDetails struct {
 
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
-func ValidateToken(signedToken string, ctx *gin.Context) (claims *SignedDetails, msg string) {
-	token, err := ctx.Request.Header["Token"]
+func ExtractToken(ctx *gin.Context) (claims *SignedDetails, msg string) {
+	token, err := ctx.Request.Header["Authorization"]
 
 	if !err {
-		ctx.JSON(http.StatusOK, responses.ProjectResponse{Status: http.StatusOK, Message: "success"})
+		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Token not found"})
+		ctx.Abort()
 		return
 	}
 
