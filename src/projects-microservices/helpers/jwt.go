@@ -28,11 +28,6 @@ func ExtractUnverifiedClaims(tokenString string) (string, error) {
 		return "", err
 	}
 
-	if tokenString == "" {
-		fmt.Println("Error missing token from params")
-		return "", err
-	}
-
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		name = fmt.Sprintln(claims["sub"])
 	}
