@@ -1,9 +1,13 @@
 package http
 
-import "github.com/gin-gonic/gin"
+import (
+	"traileau-projects-microservices/delivery/middleware"
+
+	"github.com/gin-gonic/gin"
+)
 
 func (pc ProjectController) RegisterProjectRoutes(rg *gin.RouterGroup) {
 	projectroute := rg.Group("project")
-	projectroute.GET("/", pc.GetAll)
+	projectroute.GET("/", middleware.Authenticate(), pc.GetAll)
 	projectroute.POST("/", pc.CreateProject)
 }
