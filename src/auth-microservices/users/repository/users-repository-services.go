@@ -7,6 +7,7 @@ import (
 	models "traileau-auth-microservices/users/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -44,9 +45,10 @@ func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User,
 // GetData implements repository.UserRepositoryInterface.
 func (c *UserRepository) GetData(ctx context.Context, username *string) (user *models.User, err error) {
 	var result struct {
-		Name     string `bson:"username"`
-		Email    string `bson:"email"`
-		Password string `bson:"password"`
+		Id       primitive.ObjectID `bson:"_id"`
+		Name     string             `bson:"username"`
+		Email    string             `bson:"email"`
+		Password string             `bson:"password"`
 	}
 	collection := c.mongoDB.Collection("users")
 	filter := bson.D{{Key: "email", Value: username}}
@@ -54,6 +56,7 @@ func (c *UserRepository) GetData(ctx context.Context, username *string) (user *m
 	err = collection.FindOne(context.TODO(), filter).Decode(&result)
 
 	user = &models.User{
+		Id:       result.Id,
 		Username: result.Name,
 		Email:    result.Email,
 		Password: result.Password,

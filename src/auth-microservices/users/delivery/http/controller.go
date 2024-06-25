@@ -9,6 +9,7 @@ import (
 	model "traileau-auth-microservices/users/models"
 
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"traileau-auth-microservices/users/utils"
 
@@ -77,6 +78,7 @@ func (uc *UserController) SignUp(ctx *gin.Context) {
 	}
 
 	newUser := model.User{
+		Id:       primitive.NewObjectID(),
 		Username: user.Username,
 		Email:    validEmail.Address,
 		Password: string(cryptedPassword),
@@ -111,8 +113,10 @@ func (uc *UserController) SignIn(ctx *gin.Context) {
 		})
 	}
 
+	userId := utils.SplitObjectID(user.Id)
+
 	checkUserPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
-	token, tokenError := utils.CreateToken(body.Email)
+	token, tokenError := utils.CreateToken(body.Email, userId)
 
 	if tokenError != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

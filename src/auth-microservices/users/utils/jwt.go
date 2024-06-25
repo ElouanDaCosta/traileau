@@ -9,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func CreateToken(email string) (string, error) {
+func CreateToken(email string, sub string) (string, error) {
 	dotenv := godotenv.Load()
 	if dotenv != nil {
 		log.Fatal("Error loading .env file")
@@ -19,8 +19,8 @@ func CreateToken(email string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"email": email,
-			"exp":   time.Now().Add(time.Hour * 24).Unix(),
+			"sub": sub,
+			"exp": time.Now().Add(time.Hour * 24).Unix(),
 		})
 
 	tokenString, err := token.SignedString(secretKey)
