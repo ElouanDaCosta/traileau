@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	responses "traileau/users/delivery/response"
-	usecase "traileau/users/domain/usecase"
-	models "traileau/users/models"
+	responses "traileau-auth-microservices/users/delivery/response"
+	usecase "traileau-auth-microservices/users/domain/usecase"
+	model "traileau-auth-microservices/users/models"
 
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"traileau/users/utils"
+	"traileau-auth-microservices/users/utils"
 
 	"net/mail"
 
@@ -32,7 +33,7 @@ func (uc *UserController) SignUp(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	var user models.User
+	var user model.User
 
 	// Decode the request body to access the data like a json
 	decoder := json.NewDecoder(ctx.Request.Body)
@@ -76,7 +77,8 @@ func (uc *UserController) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	newUser := models.User{
+	newUser := model.User{
+		Id:       primitive.NewObjectID(),
 		Username: user.Username,
 		Email:    validEmail.Address,
 		Password: string(cryptedPassword),
@@ -111,8 +113,10 @@ func (uc *UserController) SignIn(ctx *gin.Context) {
 		})
 	}
 
+	userId := utils.SplitObjectID(user.Id)
+
 	checkUserPassword := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
-	token, tokenError := utils.CreateToken(body.Email)
+	token, tokenError := utils.CreateToken(body.Email, userId)
 
 	if tokenError != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

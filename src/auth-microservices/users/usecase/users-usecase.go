@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 	"log"
-	domain2 "traileau/users/domain/repository"
-	domain1 "traileau/users/domain/usecase"
-	models "traileau/users/models"
+	domain2 "traileau-auth-microservices/users/domain/repository"
+	domain1 "traileau-auth-microservices/users/domain/usecase"
+	models "traileau-auth-microservices/users/models"
 )
 
 type UserServiceImpl struct {
