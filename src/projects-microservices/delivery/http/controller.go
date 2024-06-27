@@ -51,7 +51,7 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 
 	// Return 400 if missing user input
 	if errorValidateProject != nil {
-		fmt.Println("validation failed 2")
+		fmt.Println("validation failed for project struct")
 		fmt.Println(errorValidateProject)
 		ctx.JSON(400, gin.H{"error": "Failed to validate the project structure"})
 		return
@@ -60,6 +60,7 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	newProject := model.Project{
 		Name:        project.Name,
 		Description: project.Description,
+		Author:      "test",
 	}
 	ctx.JSON(http.StatusOK, responses.ProjectResponse{Status: http.StatusOK, Message: "success", Data: newProject})
 }
