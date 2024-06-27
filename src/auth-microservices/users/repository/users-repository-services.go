@@ -43,7 +43,7 @@ func (c UserRepository) GetAllData(ctx context.Context) (userResp []models.User,
 }
 
 // GetData implements repository.UserRepositoryInterface.
-func (c *UserRepository) GetData(ctx context.Context, username *string) (user *models.User, err error) {
+func (c *UserRepository) GetData(ctx context.Context, email *string) (user *models.User, err error) {
 	var result struct {
 		Id       primitive.ObjectID `bson:"_id"`
 		Name     string             `bson:"username"`
@@ -51,7 +51,7 @@ func (c *UserRepository) GetData(ctx context.Context, username *string) (user *m
 		Password string             `bson:"password"`
 	}
 	collection := c.mongoDB.Collection("users")
-	filter := bson.D{{Key: "email", Value: username}}
+	filter := bson.D{{Key: "email", Value: email}}
 
 	err = collection.FindOne(context.TODO(), filter).Decode(&result)
 
