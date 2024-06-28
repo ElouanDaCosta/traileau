@@ -6,6 +6,7 @@ import (
 	"net/http"
 	responses "traileau-projects-microservices/delivery/response"
 	usecase "traileau-projects-microservices/domain/usecase"
+	helper "traileau-projects-microservices/helpers"
 	model "traileau-projects-microservices/models"
 
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,8 @@ func (pc *ProjectController) GetAll(ctx *gin.Context) {
 func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
+
+	helper.ExtractToken(ctx)
 
 	var project model.Project
 
