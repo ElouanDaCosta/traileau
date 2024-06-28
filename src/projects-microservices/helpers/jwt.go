@@ -22,7 +22,9 @@ var SECRET_KEY string = os.Getenv("SECRET_KEY")
 func ExtractUnverifiedClaims(tokenString string) (string, error) {
 	var name string
 	parsedToken := strings.Split(tokenString, "Bearer ")
+
 	token, _, err := new(jwt.Parser).ParseUnverified(parsedToken[1], jwt.MapClaims{})
+
 	if err != nil {
 		fmt.Println(err)
 		return "", err
