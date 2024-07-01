@@ -36,7 +36,15 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	helper.ExtractToken(ctx)
+	user, userErr := helper.GetTokenData(ctx)
+
+	if userErr != nil {
+		fmt.Printf("error %s", userErr)
+		ctx.JSON(501, gin.H{"error": userErr})
+		return
+	}
+
+	GetUser(user)
 
 	var project model.Project
 
@@ -63,7 +71,7 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	newProject := model.Project{
 		Name:        project.Name,
 		Description: project.Description,
-		Author:      "test",
+		Author:      user,
 	}
 	ctx.JSON(http.StatusOK, responses.ProjectResponse{Status: http.StatusOK, Message: "success", Data: newProject})
 }
