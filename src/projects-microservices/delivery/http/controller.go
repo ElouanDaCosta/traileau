@@ -73,5 +73,13 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 		Description: project.Description,
 		Author:      user,
 	}
+
+	err := pc.ProjectUseCase.CreateProject(ctx, &newProject)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, responses.ProjectResponse{Status: http.StatusOK, Message: "success", Data: newProject})
 }
