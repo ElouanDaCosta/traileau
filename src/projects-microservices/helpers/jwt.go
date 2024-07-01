@@ -11,16 +11,15 @@ import (
 )
 
 type SignedDetails struct {
-	Email     string
-	Username  string
-	User_type string
+	email     string
+	sub       int
 	ExpiresAt int
 }
 
 var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
 func ExtractUnverifiedClaims(tokenString string) (string, error) {
-	var name string
+	var email string
 	parsedToken := strings.Split(tokenString, "Bearer ")
 
 	token, _, err := new(jwt.Parser).ParseUnverified(parsedToken[1], jwt.MapClaims{})
@@ -31,13 +30,13 @@ func ExtractUnverifiedClaims(tokenString string) (string, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		name = fmt.Sprintln(claims["sub"])
+		email = fmt.Sprintln(claims["email"])
 	}
 
-	if name == "" {
+	if email == "" {
 		return "", fmt.Errorf("invalid token payload")
 	}
-	return name, nil
+	return email, nil
 }
 
 func ExtractToken(ctx *gin.Context) string {
@@ -50,4 +49,20 @@ func ExtractToken(ctx *gin.Context) string {
 	}
 
 	return token
+}
+
+func GetTokenData(ctx *gin.Context) (string, error) {
+	token := ExtractToken(ctx)
+
+	if token == "nul" {
+		return "nul", fmt.Errorf("error getting the token")
+	}
+
+	emailFromToken, err := ExtractUnverifiedClaims(token)
+
+	if err != nil {
+		return "Email: nul", err
+	}
+
+	return emailFromToken, err
 }
