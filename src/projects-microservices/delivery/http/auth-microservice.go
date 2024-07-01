@@ -27,7 +27,7 @@ func init() {
 	}
 }
 
-func GetUser(email string) error {
+func GetUser(email string) (*http.Response, error) {
 
 	temp := strings.Split(email, "\n")
 
@@ -35,12 +35,10 @@ func GetUser(email string) error {
 
 	if err != nil {
 		fmt.Println(err)
-		return err
+		return resp, err
 	}
-
-	fmt.Println(resp)
 
 	fmt.Println("Request send to the authentication microservice at:", auth_baseUrl, auth_port)
 
-	return err
+	return resp, err
 }
