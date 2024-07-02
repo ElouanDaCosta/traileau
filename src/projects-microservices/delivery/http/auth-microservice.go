@@ -38,7 +38,7 @@ func GetUser(email string) (*http.Response, error) {
 		return resp, err
 	}
 
-	fmt.Println("Request send to the authentication microservice at:", auth_baseUrl, auth_port)
+	fmt.Println("Request send to the authentication microservice at:", auth_baseUrl+auth_port)
 
 	return resp, err
 }
