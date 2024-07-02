@@ -14,14 +14,9 @@ func Authenticate() gin.HandlerFunc {
 		_, err := helper.ExtractUnverifiedClaims(token)
 
 		if err != nil {
-			c.JSON(http.StatusBadGateway, gin.H{"message": "zizi"})
+			c.JSON(http.StatusBadGateway, gin.H{"Error": "authenticate with user token"})
 			c.Abort()
 			return
 		}
-
-		// c.Set("email", claims.Email)
-		// c.Set("first_name", claims.Username)
-		// c.Set("user_type", claims.User_type)
-		// c.Next()
 	}
 }

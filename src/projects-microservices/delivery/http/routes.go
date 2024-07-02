@@ -9,5 +9,5 @@ import (
 func (pc ProjectController) RegisterProjectRoutes(rg *gin.RouterGroup) {
 	projectroute := rg.Group("project")
 	projectroute.GET("/", middleware.Authenticate(), pc.GetAll)
-	projectroute.POST("/", pc.CreateProject)
+	projectroute.POST("/", middleware.Authenticate(), pc.CreateProject)
 }

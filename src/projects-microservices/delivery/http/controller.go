@@ -6,6 +6,7 @@ import (
 	"net/http"
 	responses "traileau-projects-microservices/delivery/response"
 	usecase "traileau-projects-microservices/domain/usecase"
+	helper "traileau-projects-microservices/helpers"
 	model "traileau-projects-microservices/models"
 
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,29 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
+	userToken, userErr := helper.GetTokenData(ctx)
+
+	if userErr != nil {
+		fmt.Printf("error %s", userErr)
+		ctx.JSON(501, gin.H{"error": userErr})
+		return
+	}
+
+	existingUser, existingUserError := GetUser(userToken)
+
+	if existingUserError != nil {
+		fmt.Printf("error %s", existingUserError)
+		ctx.JSON(501, gin.H{"error": existingUserError})
+		return
+	}
+
+	if existingUser.StatusCode == 404 {
+		fmt.Printf("error %s", existingUserError)
+		ctx.JSON(401, gin.H{"error": "User not found from the current session"})
+		ctx.Abort()
+		return
+	}
+
 	var project model.Project
 
 	// Decode the request body to access the data like a json
@@ -60,7 +84,15 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	newProject := model.Project{
 		Name:        project.Name,
 		Description: project.Description,
-		Author:      "test",
+		Author:      userToken,
 	}
+
+	err := pc.ProjectUseCase.CreateProject(ctx, &newProject)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, responses.ProjectResponse{Status: http.StatusOK, Message: "success", Data: newProject})
 }
