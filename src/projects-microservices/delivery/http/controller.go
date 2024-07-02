@@ -36,7 +36,7 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	// Initialize the validator
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	user, userErr := helper.GetTokenData(ctx)
+	userToken, userErr := helper.GetTokenData(ctx)
 
 	if userErr != nil {
 		fmt.Printf("error %s", userErr)
@@ -44,7 +44,20 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 		return
 	}
 
-	GetUser(user)
+	existingUser, existingUserError := GetUser(userToken)
+
+	if existingUserError != nil {
+		fmt.Printf("error %s", existingUserError)
+		ctx.JSON(501, gin.H{"error": existingUserError})
+		return
+	}
+
+	if existingUser.StatusCode == 404 {
+		fmt.Printf("error %s", existingUserError)
+		ctx.JSON(401, gin.H{"error": "User not found from the current session"})
+		ctx.Abort()
+		return
+	}
 
 	var project model.Project
 
@@ -71,7 +84,7 @@ func (pc *ProjectController) CreateProject(ctx *gin.Context) {
 	newProject := model.Project{
 		Name:        project.Name,
 		Description: project.Description,
-		Author:      user,
+		Author:      userToken,
 	}
 
 	err := pc.ProjectUseCase.CreateProject(ctx, &newProject)
