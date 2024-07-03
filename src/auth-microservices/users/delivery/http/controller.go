@@ -144,7 +144,6 @@ func (uc *UserController) GetAll(ctx *gin.Context) {
 }
 
 func (uc *UserController) GetOne(ctx *gin.Context) {
-	fmt.Println("Request received from: ", ctx.Request.Host)
 	email, err := ctx.GetQuery("email")
 
 	if !err {
