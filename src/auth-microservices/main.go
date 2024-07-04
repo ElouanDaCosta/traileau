@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"traileau-auth-microservices/configs"
+	auth "traileau-auth-microservices/users/delivery/grpc"
 	"traileau-auth-microservices/users/delivery/http"
 	domain "traileau-auth-microservices/users/domain/usecase"
 	"traileau-auth-microservices/users/repository"
@@ -33,14 +34,8 @@ type serverStruct struct {
 	authpb.UnimplementedAuthServiceServer
 }
 
-func (s *serverStruct) Login(ctx context.Context, req *authpb.LoginRequest) (*authpb.LoginResponse, error) {
-	// Implémentation de la fonction Login
-	return &authpb.LoginResponse{Token: "example_token"}, nil
-}
-
 func init() {
 	ctx = context.TODO()
-
 	// mongo
 	mongoCon, err := configs.Connect()
 	if err != nil {
@@ -83,7 +78,8 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	authpb.RegisterAuthServiceServer(s, &serverStruct{})
+	authServer := &auth.ServerStruct{}
+	authpb.RegisterAuthServiceServer(s, authServer)
 	log.Println("Starting AuthService server on port 8081...")
 	if grpcErr := s.Serve(grpcServer); grpcErr != nil {
 		log.Fatalf("Failed to serve: %v", grpcErr)

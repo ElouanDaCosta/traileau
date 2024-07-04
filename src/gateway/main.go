@@ -48,6 +48,22 @@ func main() {
 		c.JSON(http.StatusOK, res)
 	})
 
+	r.POST("/v1/auth/signup", func(c *gin.Context) {
+		var req authpb.SignupRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		res, err := authClient.Signup(context.Background(), &req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, res)
+	})
+
 	r.POST("/projects", func(c *gin.Context) {
 		var req projectpb.CreateProjectRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
