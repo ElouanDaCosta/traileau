@@ -27,3 +27,5 @@ go.work.sum
 
 # Env
 .env
+src/gateway/traileau-gateway
+src/auth-microservices/traileau-gateway

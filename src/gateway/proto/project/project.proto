@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package project;
+
+option go_package = "traileau-gateway/proto/project";
+
+service ProjectService {
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse);
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse);
+}
+
+message CreateProjectRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message CreateProjectResponse {
+  string projectId = 1;
+}
+
+message GetProjectRequest {
+  string projectId = 1;
+}
+
+message GetProjectResponse {
+  string title = 1;
+  string description = 2;
+}
