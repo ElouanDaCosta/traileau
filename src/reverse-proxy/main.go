@@ -7,14 +7,41 @@ import (
 	"net/url"
 )
 
-func NewProxy(rawUrl string) (*httputil.ReverseProxy, error) {
+type SimpleProxy struct {
+	Proxy *httputil.ReverseProxy
+}
+
+func NewProxy(rawUrl string) (*SimpleProxy, error) {
 	url, err := url.Parse(rawUrl)
 	if err != nil {
 		return nil, err
 	}
-	proxy := httputil.NewSingleHostReverseProxy(url)
+	s := &SimpleProxy{httputil.NewSingleHostReverseProxy(url)}
 
-	return proxy, nil
+	// Modify requests
+	// originalDirector := s.Proxy.Director
+	// s.Proxy.Director = func(r *http.Request) {
+	// 	originalDirector(r)
+	// 	r.Header.Set("Some-Header", "Some Value")
+	// }
+
+	// // Modify response
+	// s.Proxy.ModifyResponse = func(r *http.Response) error {
+	// 	// Add a response header
+	// 	r.Header.Set("Server", "CodeDodle")
+	// 	return nil
+	// }
+
+	return s, nil
+}
+
+func (s *SimpleProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// Do anything you want here
+	// e.g. blacklisting IP, log time, modify headers, etc
+	log.Printf("Proxy receives request from.")
+	log.Printf("Proxy forwards request to ")
+	s.Proxy.ServeHTTP(w, r)
+	log.Printf("Origin server completes request.")
 }
 
 func main() {
