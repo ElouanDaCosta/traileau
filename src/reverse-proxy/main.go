@@ -38,8 +38,8 @@ func NewProxy(rawUrl string) (*SimpleProxy, error) {
 func (s *SimpleProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Do anything you want here
 	// e.g. blacklisting IP, log time, modify headers, etc
-	log.Printf("Proxy receives request from.")
-	log.Printf("Proxy forwards request to ")
+	log.Printf("Proxy receives request.")
+	log.Printf("Proxy forwards request.")
 	s.Proxy.ServeHTTP(w, r)
 	log.Printf("Origin server completes request.")
 }
