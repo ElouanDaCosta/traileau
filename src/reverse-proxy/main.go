@@ -7,20 +7,28 @@ import (
 	"net/url"
 )
 
+func NewProxy(rawUrl string) (*httputil.ReverseProxy, error) {
+	url, err := url.Parse(rawUrl)
+	if err != nil {
+		return nil, err
+	}
+	proxy := httputil.NewSingleHostReverseProxy(url)
+
+	return proxy, nil
+}
+
 func main() {
-	auth, authErr := url.Parse("http://localhost:8081")
+	auth, authErr := NewProxy("http://localhost:8081")
 	if authErr != nil {
 		panic(authErr)
 	}
-	authRedirectProxy := httputil.NewSingleHostReverseProxy(auth)
 
-	project, projectErr := url.Parse("http://localhost:8082")
+	project, projectErr := NewProxy("http://localhost:8082")
 	if projectErr != nil {
 		panic(projectErr)
 	}
-	projectRedirectProxy := httputil.NewSingleHostReverseProxy(project)
 
-	http.Handle("/v1/auth/", authRedirectProxy)
-	http.Handle("/v1/project/", projectRedirectProxy)
+	http.Handle("/v1/auth/", auth)
+	http.Handle("/v1/project/", project)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
