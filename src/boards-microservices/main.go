@@ -6,11 +6,11 @@ import (
 	"log"
 	"os"
 
-	"traileau-projects-microservices/configs"
-	"traileau-projects-microservices/delivery/http"
-	domain "traileau-projects-microservices/domain/usecase"
-	"traileau-projects-microservices/repository"
-	"traileau-projects-microservices/usecase"
+	"boards-projects-microservices/configs"
+	"boards-projects-microservices/delivery/http"
+	domain "boards-projects-microservices/domain/usecase"
+	"boards-projects-microservices/repository"
+	"boards-projects-microservices/usecase"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"

@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	helper "boards-projects-microservices/helpers"
 	"net/http"
-	helper "traileau-projects-microservices/helpers"
 
 	"github.com/gin-gonic/gin"
 )

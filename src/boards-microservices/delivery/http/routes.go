@@ -1,7 +1,7 @@
 package http
 
 import (
-	"traileau-projects-microservices/delivery/middleware"
+	"boards-projects-microservices/delivery/middleware"
 
 	"github.com/gin-gonic/gin"
 )

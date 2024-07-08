@@ -1,8 +1,8 @@
 package usecase
 
 import (
+	model "boards-projects-microservices/models"
 	"context"
-	model "traileau-projects-microservices/models"
 )
 
 type ProjectUseCase interface {

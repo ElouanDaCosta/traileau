@@ -1,13 +1,13 @@
 package http
 
 import (
+	responses "boards-projects-microservices/delivery/response"
+	usecase "boards-projects-microservices/domain/usecase"
+	helper "boards-projects-microservices/helpers"
+	model "boards-projects-microservices/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	responses "traileau-projects-microservices/delivery/response"
-	usecase "traileau-projects-microservices/domain/usecase"
-	helper "traileau-projects-microservices/helpers"
-	model "traileau-projects-microservices/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
