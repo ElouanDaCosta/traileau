@@ -56,6 +56,6 @@ func main() {
 	}
 
 	http.Handle("/v1/auth/", auth)
-	http.Handle("/v1/project/", project)
+	http.Handle("/v1/boards/", project)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
