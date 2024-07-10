@@ -1,11 +1,11 @@
 package usecase
 
 import (
+	domain1 "boards-projects-microservices/domain/repository"
+	domain2 "boards-projects-microservices/domain/usecase"
+	projects_model "boards-projects-microservices/models"
 	"context"
 	"log"
-	domain1 "traileau-projects-microservices/domain/repository"
-	domain2 "traileau-projects-microservices/domain/usecase"
-	projects_model "traileau-projects-microservices/models"
 )
 
 type ProjectServiceImpl struct {

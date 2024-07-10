@@ -1,4 +1,4 @@
-module traileau-projects-microservices
+module boards-projects-microservices
 
 go 1.22.4
 

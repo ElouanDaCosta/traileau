@@ -1,10 +1,10 @@
 package repository
 
 import (
+	domain "boards-projects-microservices/domain/repository"
+	model "boards-projects-microservices/models"
 	"context"
 	"log"
-	domain "traileau-projects-microservices/domain/repository"
-	model "traileau-projects-microservices/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

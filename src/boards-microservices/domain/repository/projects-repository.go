@@ -1,8 +1,8 @@
 package repository
 
 import (
+	project_model "boards-projects-microservices/models"
 	"context"
-	project_model "traileau-projects-microservices/models"
 )
 
 type ProjectRepositoryInterface interface {
