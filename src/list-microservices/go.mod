@@ -1,4 +1,4 @@
-module traileau--list-microservices
+module traileau-list-microservices
 
 go 1.22.5
 
