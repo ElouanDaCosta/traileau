@@ -6,9 +6,9 @@ import (
 )
 
 type ProjectRepositoryInterface interface {
-	GetAllData(ctx context.Context) (user []project_model.Project, err error)
+	GetAllData(ctx context.Context) (boards []project_model.Project, err error)
 	InsertData(ctx context.Context, req *project_model.Project) error
 	UpdateData(ctx context.Context, req *project_model.Project) error
 	DeleteData(ctx context.Context, req *string) error
-	GetData(ctx context.Context, username *string) (user *project_model.Project, err error)
+	GetData(ctx context.Context, username *string) (board *project_model.Project, err error)
 }
