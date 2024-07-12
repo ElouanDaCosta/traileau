@@ -55,7 +55,13 @@ func main() {
 		panic(projectErr)
 	}
 
+	list, listErr := NewProxy("http://localhost:8083")
+	if listErr != nil {
+		panic(listErr)
+	}
+
 	http.Handle("/v1/auth/", auth)
 	http.Handle("/v1/boards/", project)
+	http.Handle("/v1/lists/", list)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
