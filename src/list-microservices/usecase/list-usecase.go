@@ -12,28 +12,28 @@ type ListUseCase struct {
 	ctx      context.Context
 }
 
-// CreateProject implements usecase.ListUseCase.
-func (l *ListUseCase) CreateProject(ctx context.Context, req *model.List) error {
-	panic("unimplemented")
-}
-
-// DeleteProject implements usecase.ListUseCase.
-func (l *ListUseCase) DeleteProject(ctx context.Context, req *string) error {
-	panic("unimplemented")
-}
-
 // GetAll implements usecase.ListUseCase.
 func (l *ListUseCase) GetAll(ctx context.Context) ([]model.List, error) {
 	panic("unimplemented")
 }
 
-// GetProject implements usecase.ListUseCase.
-func (l *ListUseCase) GetProject(ctx context.Context, req *string) (*model.List, error) {
+// CreateList implements usecase.ListUseCase.
+func (l *ListUseCase) CreateList(ctx context.Context, req *model.List) error {
 	panic("unimplemented")
 }
 
-// UpdateProject implements usecase.ListUseCase.
-func (l *ListUseCase) UpdateProject(ctx context.Context, req *model.List) error {
+// DeleteList implements usecase.ListUseCase.
+func (l *ListUseCase) DeleteList(ctx context.Context, req *string) error {
+	panic("unimplemented")
+}
+
+// GetList implements usecase.ListUseCase.
+func (l *ListUseCase) GetList(ctx context.Context, req *string) (*model.List, error) {
+	panic("unimplemented")
+}
+
+// UpdateList implements usecase.ListUseCase.
+func (l *ListUseCase) UpdateList(ctx context.Context, req *model.List) error {
 	panic("unimplemented")
 }
 
