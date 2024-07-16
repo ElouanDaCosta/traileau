@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"log"
 	domain_repository "traileau-list-microservices/domain/repository"
 	domain_usecase "traileau-list-microservices/domain/usecase"
 	model "traileau-list-microservices/models"
@@ -14,7 +15,16 @@ type ListUseCase struct {
 
 // GetAll implements usecase.ListUseCase.
 func (l *ListUseCase) GetAll(ctx context.Context) ([]model.List, error) {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	list, err := l.listRepo.GetAllData(ctx)
+	if err != nil {
+		log.Println("failed to show data project with default log")
+		return list, err
+	}
+
+	return list, err
 }
 
 // CreateList implements usecase.ListUseCase.
