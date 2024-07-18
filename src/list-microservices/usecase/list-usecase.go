@@ -29,7 +29,17 @@ func (l *ListUseCase) GetAll(ctx context.Context) ([]model.List, error) {
 
 // CreateList implements usecase.ListUseCase.
 func (l *ListUseCase) CreateList(ctx context.Context, req *model.List) error {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	err := l.listRepo.InsertData(ctx, req)
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully Inserted List Data")
+
+	return err
 }
 
 // DeleteList implements usecase.ListUseCase.

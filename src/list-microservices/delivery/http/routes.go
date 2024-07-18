@@ -1,9 +1,13 @@
 package http
 
-import "github.com/gin-gonic/gin"
+import (
+	"traileau-list-microservices/delivery/middleware"
+
+	"github.com/gin-gonic/gin"
+)
 
 func (lc ListController) RegisterListRoutes(rg *gin.RouterGroup) {
 	listroute := rg.Group("lists")
-	listroute.GET("/", lc.GetAll)
-	listroute.POST("/", lc.CreateList)
+	listroute.GET("/", middleware.Authenticate(), lc.GetAll)
+	listroute.POST("/", middleware.Authenticate(), lc.CreateList)
 }
