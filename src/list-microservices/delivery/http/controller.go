@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ListController struct {
@@ -54,6 +55,7 @@ func (lc *ListController) CreateList(ctx *gin.Context) {
 	}
 
 	newList := model.List{
+		Id:       primitive.NewObjectID(),
 		Name:     list.Name,
 		Position: list.Position,
 	}
