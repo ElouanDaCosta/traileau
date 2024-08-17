@@ -7,6 +7,7 @@ import (
 	model "traileau-list-microservices/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -16,7 +17,12 @@ type ListRepository struct {
 
 // DeleteData implements repository.ListRepositoryInterface.
 func (l *ListRepository) DeleteData(ctx context.Context, req *string) error {
-	panic("unimplemented")
+	_, err := l.mongoDB.Collection("lists").DeleteOne(ctx, req)
+	if err != nil {
+		return err
+	}
+
+	return err
 }
 
 // GetAllData implements repository.ListRepositoryInterface.
@@ -42,8 +48,26 @@ func (l *ListRepository) GetAllData(ctx context.Context) (lists []model.List, er
 }
 
 // GetData implements repository.ListRepositoryInterface.
-func (l *ListRepository) GetData(ctx context.Context, username *string) (list *model.List, err error) {
-	panic("unimplemented")
+func (l *ListRepository) GetData(ctx context.Context, name *string) (list *model.List, err error) {
+	var result struct {
+		Id       primitive.ObjectID `bson:"_id"`
+		Name     string             `bson:"name"`
+		Position int                `bson:"position"`
+		Boards   string             `bson:"boards"`
+	}
+	collection := l.mongoDB.Collection("lists")
+	filter := bson.D{{Key: "name", Value: name}}
+
+	err = collection.FindOne(context.TODO(), filter).Decode(&result)
+
+	list = &model.List{
+		Id:       result.Id,
+		Name:     result.Name,
+		Position: result.Position,
+		Boards:   result.Boards,
+	}
+
+	return list, err
 }
 
 // InsertData implements repository.ListRepositoryInterface.

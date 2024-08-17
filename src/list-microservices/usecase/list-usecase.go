@@ -44,12 +44,31 @@ func (l *ListUseCase) CreateList(ctx context.Context, req *model.List) error {
 
 // DeleteList implements usecase.ListUseCase.
 func (l *ListUseCase) DeleteList(ctx context.Context, req *string) error {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	err := l.listRepo.DeleteData(ctx, req)
+	if err != nil {
+		return err
+	}
+	log.Println("Successfully Deleted List Data")
+
+	return err
 }
 
 // GetList implements usecase.ListUseCase.
-func (l *ListUseCase) GetList(ctx context.Context, req *string) (*model.List, error) {
-	panic("unimplemented")
+func (l *ListUseCase) GetList(ctx context.Context, name *string) (*model.List, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	list, err := l.listRepo.GetData(ctx, name)
+	if err != nil {
+		log.Println("failed to show list data with default log")
+		return list, err
+	}
+
+	return list, err
 }
 
 // UpdateList implements usecase.ListUseCase.

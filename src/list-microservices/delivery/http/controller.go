@@ -69,3 +69,33 @@ func (lc *ListController) CreateList(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response.ListResponse{Status: http.StatusOK, Message: "success", Data: newList})
 }
+
+func (lc *ListController) DeleteList(ctx *gin.Context) {
+	// Initialize the validator
+	validate := validator.New(validator.WithRequiredStructEnabled())
+
+	var list model.List
+
+	// Decode the request body to access the data like a json
+	decoder := json.NewDecoder(ctx.Request.Body)
+	error := decoder.Decode(&list)
+	if error != nil {
+		fmt.Printf("error %s", error)
+		ctx.JSON(501, gin.H{"error": error})
+		return
+	}
+
+	errorValidateList := validate.Struct(&list)
+
+	if errorValidateList != nil {
+		ctx.JSON(400, gin.H{"error": "Failed to validate the list structure"})
+		return
+	}
+
+	_, err := lc.ListUseCase.GetList(ctx, &list.Name)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": "List not found"})
+	}
+
+}
