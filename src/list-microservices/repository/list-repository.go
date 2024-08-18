@@ -17,7 +17,8 @@ type ListRepository struct {
 
 // DeleteData implements repository.ListRepositoryInterface.
 func (l *ListRepository) DeleteData(ctx context.Context, req *string) error {
-	_, err := l.mongoDB.Collection("lists").DeleteOne(ctx, req)
+	filter := bson.D{{Key: "name", Value: req}}
+	_, err := l.mongoDB.Collection("lists").DeleteOne(ctx, filter)
 	if err != nil {
 		return err
 	}

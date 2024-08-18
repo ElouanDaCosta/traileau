@@ -92,10 +92,17 @@ func (lc *ListController) DeleteList(ctx *gin.Context) {
 		return
 	}
 
-	_, err := lc.ListUseCase.GetList(ctx, &list.Name)
+	findList, err := lc.ListUseCase.GetList(ctx, &list.Name)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": "List not found"})
 	}
 
+	deleteErr := lc.ListUseCase.DeleteList(ctx, &findList.Name)
+
+	if deleteErr != nil {
+		fmt.Println(deleteErr)
+	} else {
+		ctx.JSON(http.StatusOK, response.ListResponse{Status: http.StatusOK, Message: "success"})
+	}
 }
