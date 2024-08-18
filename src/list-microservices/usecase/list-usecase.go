@@ -73,7 +73,15 @@ func (l *ListUseCase) GetList(ctx context.Context, name *string) (*model.List, e
 
 // UpdateList implements usecase.ListUseCase.
 func (l *ListUseCase) UpdateList(ctx context.Context, req *model.List) error {
-	panic("unimplemented")
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	err := l.listRepo.UpdateData(ctx, req)
+	if err != nil {
+		log.Println("failed to update list data with default log")
+	}
+
+	return err
 }
 
 func NewProjectUsecase(listRepo domain_repository.ListRepositoryInterface, ctx context.Context) domain_usecase.ListUseCase {

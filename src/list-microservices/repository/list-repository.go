@@ -83,7 +83,17 @@ func (l *ListRepository) InsertData(ctx context.Context, req *model.List) error 
 
 // UpdateData implements repository.ListRepositoryInterface.
 func (l *ListRepository) UpdateData(ctx context.Context, req *model.List) error {
-	panic("unimplemented")
+	findList, findErr := l.GetData(ctx, &req.Name)
+	if findErr != nil {
+		return findErr
+	}
+	_, err := l.mongoDB.Collection("lists").UpdateOne(ctx, findList, req)
+
+	if err != nil {
+		return err
+	}
+
+	return err
 }
 
 func NewProjectRepository(mongo *mongo.Database) domain.ListRepositoryInterface {
